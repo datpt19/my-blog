@@ -84,7 +84,7 @@ Hệ thống sử dụng **Springdoc OpenAPI** để tự động sinh tài li�
 ### 🧑‍💻 Tác giả chính
 | Tên                | GitHub Profile                                      | Vai trò            |
 |--------------------|-----------------------------------------------------|---------------------|
-| **Phan Thành Đạt** | [@phanthanhdat1902](https://github.com/phanthanhdat1902) | Backend Developer, Maintainer |
+| **Phan Thành Đạt** | [@phanthanhdat1902](https://github.com/datpt19) | Backend Developer, Maintainer |
 
 ### 🤝 Đóng góp vào dự án
 Chúng tôi luôn chào đón các bạn tham gia đóng góp để cải thiện hệ thống!
