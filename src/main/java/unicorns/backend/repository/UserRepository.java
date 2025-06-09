@@ -6,9 +6,15 @@ import unicorns.backend.entity.User;
 
 import java.util.Optional;
 
+/**
+ * @author Kim Keumtae
+ */
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findOneById(Long id);
+    Optional<User> findByEmail(String email);
+    Optional<User> findOneWithAuthoritiesByEmail(String lowercaseEmail);
 
+    Boolean existsByEmail(String email);
 }

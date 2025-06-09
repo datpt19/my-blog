@@ -1,48 +1,60 @@
 package unicorns.backend.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import unicorns.backend.dto.request.BaseRequest;
-import unicorns.backend.dto.request.CreateUserRequest;
-import unicorns.backend.dto.response.BaseResponse;
-import unicorns.backend.dto.response.CreateUserResponse;
+import unicorns.backend.dto.UserDto;
+import unicorns.backend.repository.UserRepository;
 import unicorns.backend.service.UserService;
-import unicorns.backend.util.Const;
 
+
+/**
+ * @author Kim Keumtae
+ */
 @RestController
-@RequestMapping(Const.PREFIX_USER_V1)
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
+@CrossOrigin
+@RequestMapping("/api")
 public class UserController {
 
-    UserService userService;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Operation(summary = "get all user", description = "Get all user.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User created successfully")
-    })
-    @GetMapping(value = "getAll")
-    public BaseResponse<CreateUserResponse> getAllUsers() {
-        return userService.getAllUser();
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    private static final String CHECK_ERROR_MESSAGE = "Incorrect password";
+
+    @PostMapping(path = "/register")
+    public ResponseEntity registerAccount(@Valid @RequestBody UserDto.Create userDto) {
+
+        HttpHeaders textPlainHeaders = new HttpHeaders();
+        textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
+        if (StringUtils.isEmpty(userDto.getPassword()) &&
+                (userDto.getPassword().length() <= 4 && userDto.getPassword().length() > 10)) {
+            return new ResponseEntity<>(CHECK_ERROR_MESSAGE, HttpStatus.BAD_REQUEST);
+        }
+        userService.registerAccount(userDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Create new user", description = "Creates a new user using the provided information.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input",
-                    content = @Content(schema = @Schema(implementation = BaseResponse.class)))
-    })
-    @PostMapping(value = "createUser")
-    public BaseResponse<CreateUserResponse> createUser(@Valid @RequestBody BaseRequest<CreateUserRequest> request) {
-        return userService.createUser(request);
+    @GetMapping("/users/{email}")
+    public ResponseEntity<UserDto.Response> getUser(@PathVariable String email) {
+        return userRepository.findByEmail(email)
+                .map(user -> modelMapper.map(user, UserDto.Response.class))
+                .map(response -> ResponseEntity.ok().body(response))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
-

@@ -21,5 +21,4 @@ logging:
     org.hibernate.engine.jdbc.env.internal: ERROR
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.hibernate.orm.jdbc.bind: TRACE
 
