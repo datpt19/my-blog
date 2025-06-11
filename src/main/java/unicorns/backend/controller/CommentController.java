@@ -10,7 +10,7 @@ import unicorns.backend.entity.Comment;
 import unicorns.backend.dto.CommentDto;
 import unicorns.backend.security.CurrentUser;
 import unicorns.backend.security.service.CustomUserDetails;
-import unicorns.backend.service.CommentService;
+import unicorns.backend.service.impl.CommentService;
 
 import java.util.List;
 import java.util.Optional;

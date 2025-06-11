@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import unicorns.backend.entity.Post;
 import unicorns.backend.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,4 +22,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findById(Long id);
 
     void delete(Post post);
+
+    List<Post> findBySeriesPostId(Long id);
 }

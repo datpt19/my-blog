@@ -8,12 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import unicorns.backend.exception.ApiException;
-import unicorns.backend.entity.Post;
 import unicorns.backend.dto.PostDto;
+import unicorns.backend.entity.Post;
+import unicorns.backend.exception.ApiException;
 import unicorns.backend.security.CurrentUser;
 import unicorns.backend.security.service.CustomUserDetails;
-import unicorns.backend.service.PostService;
+import unicorns.backend.service.impl.PostService;
 
 import java.util.List;
 import java.util.Optional;

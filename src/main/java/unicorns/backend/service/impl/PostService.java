@@ -1,4 +1,4 @@
-package unicorns.backend.service;
+package unicorns.backend.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +35,7 @@ public class PostService {
         newPost.setCreatedBy(customUserDetails.getName());
         newPost.setCreatedDate(LocalDateTime.now());
         newPost.setUser(new User(customUserDetails.getId())); // temporary code
+        newPost.setSeriesPostId(postDto.getSeriesPostId());
         return new PostDto(postRepository.saveAndFlush(newPost));
     }
 
@@ -46,6 +47,7 @@ public class PostService {
                     }
                     p.setTitle(editPostDto.getTitle());
                     p.setBody(editPostDto.getBody());
+                    p.setSeriesPostId(editPostDto.getSeriesPostId());
                     return p;
                 })
                 .map(PostDto::new);

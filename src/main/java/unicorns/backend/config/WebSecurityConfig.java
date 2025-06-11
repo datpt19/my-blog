@@ -79,6 +79,7 @@ public class WebSecurityConfig {
                         ).permitAll()
                         .requestMatchers(
                                 antMatcher("/api/posts/**"),
+                                antMatcher("/api/series/**"),
                                 antMatcher("/api/comments/**"))
                         .permitAll()
                         .requestMatchers(

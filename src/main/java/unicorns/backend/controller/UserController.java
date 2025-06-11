@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unicorns.backend.dto.UserDto;
 import unicorns.backend.repository.UserRepository;
-import unicorns.backend.service.UserService;
+import unicorns.backend.service.impl.UserService;
 
 
 /**

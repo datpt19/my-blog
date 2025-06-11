@@ -59,7 +59,11 @@ public class Post {
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
-    public Post() {}
+    @Column(name = "series_post_id")
+    private Long seriesPostId;
+
+    public Post() {
+    }
 
     public Post(Long id) {
         this.id = id;
