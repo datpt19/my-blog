@@ -1,7 +1,6 @@
 package unicorns.backend.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,9 +23,8 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
+@Log4j2
 public class PostController {
-
-    private final Logger log = LoggerFactory.getLogger(PostController.class);
 
     @Autowired
     private PostService postService;
@@ -34,16 +32,18 @@ public class PostController {
     @GetMapping(value = "/posts/{id}")
     public ResponseEntity<PostDto> getPost(@PathVariable Long id) {
         log.debug("REST request to get Post : {}", id);
-        Post post = postService.findForId(id).orElseThrow(() -> new ApiException("Post does not exist", HttpStatus.NOT_FOUND));
-        return new ResponseEntity<>(new PostDto(post), HttpStatus.OK);
+        PostDto postDto = postService.findDetailForId(id);
+        if (postDto == null) {
+            throw new ApiException("Post does not exist", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(postDto, HttpStatus.OK);
     }
 
     @GetMapping(value = "/posts")
     public ResponseEntity<List<PostDto>> getPostList(Pageable pageable) {
         log.debug("REST request to get Posts : {}", pageable);
-        Page<Post> posts = postService.findAllByOrderByCreatedDateDescPageable(pageable);
-        Page<PostDto> postDto = posts.map(post -> new PostDto((post)));
-        return new ResponseEntity<>(postDto.getContent(), HttpStatus.OK);
+        Page<PostDto> posts = postService.findDetailAllByOrderByCreatedDateDescPageable(pageable);
+        return new ResponseEntity<>(posts.getContent(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/posts")
@@ -66,10 +66,8 @@ public class PostController {
         if (!post.isPresent()) {
             throw new ApiException("Post could not be found", HttpStatus.NOT_FOUND);
         }
-        Optional<PostDto> returnPost = postService.editPost(postDto);
-        return returnPost.map(response -> {
-            return new ResponseEntity<PostDto>(response, HttpStatus.OK);
-        }).orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
+        PostDto returnPost = postService.editPost(postDto);
+        return new ResponseEntity<>(returnPost, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/posts/{id}")

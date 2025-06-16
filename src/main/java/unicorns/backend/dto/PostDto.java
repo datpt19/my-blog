@@ -21,6 +21,7 @@ public class PostDto {
     private String lastModifiedBy;
     private LocalDateTime lastModifiedDate;
     private Long seriesPostId;
+    private String seriesPostTitle;
 
     public PostDto() {
     }
@@ -36,5 +37,19 @@ public class PostDto {
         this.userId = post.getUser().getId();
         this.userName = post.getUser().getUserName();
         this.seriesPostId = post.getSeriesPostId();
+    }
+
+    public PostDto(Post post, String seriesPostTitle) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.body = post.getBody();
+        this.createdBy = post.getCreatedBy();
+        this.createdDate = post.getCreatedDate();
+        this.lastModifiedBy = post.getLastModifiedBy();
+        this.lastModifiedDate = post.getLastModifiedDate();
+        this.userId = post.getUser().getId();
+        this.userName = post.getUser().getUserName();
+        this.seriesPostId = post.getSeriesPostId();
+        this.seriesPostTitle = seriesPostTitle;
     }
 }
